@@ -3,24 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portal Digital Warga - Cluster Swarna Asri</title>
+  <title>Portal Digital Warga — Swarna Asri</title>
 
-  <!-- Tailwind CDN (OK untuk static GH Pages) -->
+  <!-- Tailwind CDN for rapid styling (static HTML friendly) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { display: ["ui-sans-serif","system-ui","Inter","Segoe UI","Arial"] },
+          fontFamily: { display: ["ui-sans-serif","system-ui","-apple-system","Segoe UI","Inter","Arial"] },
           keyframes: {
             shimmer: { "0%": { transform: "translateX(-120%)" }, "100%": { transform: "translateX(120%)" } },
             floaty: { "0%,100%": { transform: "translateY(0px)" }, "50%": { transform: "translateY(-8px)" } },
-            glow: { "0%,100%": { opacity: "0.28" }, "50%": { opacity: "0.75" } }
+            fadeUp: { "0%": { opacity: "0", transform: "translateY(16px)" }, "100%": { opacity: "1", transform: "translateY(0)" } },
+            glow: { "0%,100%": { opacity: "0.20" }, "50%": { opacity: "0.70" } }
           },
           animation: {
-            shimmer: "shimmer 1.8s linear infinite",
-            floaty: "floaty 6s ease-in-out infinite",
-            glow: "glow 5s ease-in-out infinite",
+            shimmer: "shimmer 1.9s linear infinite",
+            floaty: "floaty 7s ease-in-out infinite",
+            fadeUp: "fadeUp .8s ease forwards",
+            glow: "glow 6s ease-in-out infinite"
           }
         }
       }
@@ -29,151 +31,220 @@
 
   <style>
     :root{
+      --gold-300:#F7E7B1;
       --gold-400:#F5D08A;
       --gold-500:#D4AF37;
       --bg0:#05060A;
       --bg1:#070A10;
-    }
-    html{scroll-behavior:smooth}
-    body{
-      margin:0;
-      background:
-        radial-gradient(1200px 600px at 25% 0%, rgba(212,175,55,.14), transparent 60%),
-        radial-gradient(900px 520px at 82% 22%, rgba(245,208,138,.10), transparent 60%),
-        linear-gradient(180deg,var(--bg1),var(--bg0));
-      color:#fff;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      --ink:#0B0D12;
     }
 
-    .gold-text-gradient{
-      background: linear-gradient(90deg, #FFF2CC 0%, #F5D08A 22%, #D4AF37 55%, #FFF2CC 100%);
-      -webkit-background-clip:text; background-clip:text; color:transparent;
+    html { scroll-behavior: smooth; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Inter, Arial;
+      background:
+        radial-gradient(1200px 700px at 20% 0%, rgba(212,175,55,.12), transparent 60%),
+        radial-gradient(900px 600px at 80% 15%, rgba(245,208,138,.10), transparent 60%),
+        linear-gradient(180deg, var(--bg1), var(--bg0));
+      color:#fff;
     }
+
+    /* Apple-like text gradient */
+    .gold-text-gradient{
+      background: linear-gradient(90deg, #FFF2CC 0%, var(--gold-400) 25%, var(--gold-500) 55%, #FFF2CC 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    /* Premium glass */
     .glass{
       background: rgba(255,255,255,0.06);
       border: 1px solid rgba(255,255,255,0.10);
-      backdrop-filter: blur(12px);
-    }
-    .noise:before{
-      content:""; position:absolute; inset:0; pointer-events:none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.08'/%3E%3C/svg%3E");
-      mix-blend-mode: overlay; opacity:.35;
-    }
-
-    /* Navbar */
-    .nav-base{transition: background .25s ease, border-color .25s ease, transform .25s ease}
-    .nav-transparent{background: rgba(0,0,0,0); border-color: rgba(255,255,255,0.06)}
-    .nav-solid{
-      background: rgba(6,7,10,.72);
-      border-color: rgba(255,255,255,0.12);
       backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
     }
 
-    /* Reveal */
-    .reveal{opacity:0; transform: translateY(14px); transition: opacity .7s ease, transform .7s ease}
-    .reveal.inview{opacity:1; transform: translateY(0)}
-
-    /* Shimmer border */
-    .shimmer-border{position:relative; border-radius: 22px; overflow:hidden}
-    .shimmer-border:before{
-      content:""; position:absolute; inset:-2px;
-      background: linear-gradient(90deg, transparent, rgba(212,175,55,.50), transparent);
-      opacity:.55; transform: translateX(-120%); animation: shimmer 2.3s linear infinite;
+    /* Subtle noise overlay */
+    .noise:before{
+      content:"";
+      position:absolute;
+      inset:0;
       pointer-events:none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.08'/%3E%3C/svg%3E");
+      mix-blend-mode: overlay;
+      opacity:.30;
     }
-    .shimmer-border > .inner{
+
+    /* Navbar Apple-ish */
+    .nav-wrap{
+      position:fixed; top:0; left:0; right:0;
+      z-index:50;
+      padding: 10px 12px;
+      transition: padding .25s ease;
+    }
+    .nav{
+      max-width: 1120px;
+      margin: 0 auto;
+      border-radius: 18px;
+      padding: 12px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.18);
+      transition: border-radius .25s ease, padding .25s ease, background .25s ease, box-shadow .25s ease, transform .25s ease;
+    }
+    .nav.is-top{
+      background: rgba(0,0,0,0.0);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: none;
+    }
+    .nav.is-scrolled{
+      background: rgba(10,12,16,.62);
+      border: 1px solid rgba(255,255,255,0.10);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .nav-wrap.is-scrolled{
+      padding: 8px 12px;
+    }
+    .nav.is-scrolled{
+      border-radius: 16px;
+      padding: 10px 14px;
+    }
+
+    /* Logo chip */
+    .brand-chip{
+      display:flex; align-items:center; gap:10px;
+      padding: 8px 10px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+    .brand-title{ line-height: 1.05; }
+    .brand-title strong{ display:block; font-weight: 700; letter-spacing: -0.02em; }
+    .brand-title span{ display:block; font-size: 11px; color: rgba(255,255,255,.62); margin-top: 2px; }
+
+    /* Reveal on scroll */
+    .reveal{
+      opacity:0;
+      transform: translateY(16px);
+      transition: opacity .75s ease, transform .75s ease;
+      will-change: opacity, transform;
+    }
+    .reveal.inview{
+      opacity:1;
+      transform: translateY(0);
+    }
+
+    /* Shimmer frame */
+    .shimmer-frame{
       position:relative;
       border-radius: 22px;
-      background: rgba(11,13,18,.80);
-      border: 1px solid rgba(255,255,255,0.10);
       overflow:hidden;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.04);
+    }
+    .shimmer-frame:after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
+      width: 45%;
+      transform: translateX(-130%);
+      animation: shimmer 2.4s linear infinite;
+      pointer-events:none;
     }
 
     /* Slideshow */
-    .slide{position:absolute; inset:0; opacity:0; transition: opacity 1s ease; background-size:cover; background-position:center; transform:scale(1.02)}
-    .slide.active{opacity:1}
+    .slide{
+      position:absolute; inset:0;
+      opacity:0;
+      transition: opacity 1.1s ease;
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.02);
+    }
+    .slide.active{ opacity: 1; }
+
+    /* Divider line subtle */
+    .hairline{
+      height:1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.16), transparent);
+    }
+
+    /* Apple-ish buttons (only used if you later add) */
+    .btn-soft{
+      border-radius: 14px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      padding: 12px 16px;
+      transition: transform .15s ease, background .2s ease;
+    }
+    .btn-soft:hover{ background: rgba(255,255,255,0.10); transform: translateY(-1px); }
+
+    /* Headline word reveal spans */
+    .word{
+      opacity:0;
+      display:inline-block;
+      transform: translateY(10px);
+      transition: opacity .55s ease, transform .55s ease;
+    }
+    .word.on{ opacity:1; transform: translateY(0); }
   </style>
 </head>
 
 <body class="font-display">
-  <!-- NAVBAR -->
-  <header id="navbar" class="nav-base nav-transparent fixed top-0 left-0 right-0 z-50 border-b">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <a href="#home" class="flex items-center gap-3">
-        <span class="w-9 h-9 rounded-xl bg-white/5 border border-white/10 grid place-items-center">
-          <span class="text-[11px] font-bold text-[var(--gold-400)]">RT</span>
+  <!-- NAVBAR (Apple style: clean, no menu, no CTA) -->
+  <div id="navWrap" class="nav-wrap">
+    <header id="nav" class="nav is-top">
+      <a href="#home" class="brand-chip">
+        <span class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
+          <img src="assets/images/Logo_Swarna_Asri.png" alt="Logo Swarna Asri" class="w-8 h-8 object-contain" />
         </span>
-        <div class="leading-tight">
-          <div class="font-bold tracking-tight">Swarna Asri</div>
-          <div class="text-[11px] text-white/60">Portal Digital Warga</div>
+        <div class="brand-title">
+          <strong>Swarna Asri</strong>
+          <span>Portal Digital Warga</span>
         </div>
       </a>
 
-      <nav class="hidden md:flex items-center gap-6 text-sm text-white/75">
-        <a class="hover:text-white" href="#tentang">Tentang</a>
-        <a class="hover:text-white" href="#iuran">Iuran</a>
-        <a class="hover:text-white" href="#pembayaran">Pembayaran</a>
-        <a class="hover:text-white" href="#kontak">Kontak</a>
-      </nav>
-
-      <div class="flex items-center gap-3">
-        <a href="#pembayaran"
-           class="hidden sm:inline-flex px-4 py-2 rounded-xl bg-[rgba(212,175,55,.14)] border border-[rgba(212,175,55,.35)] text-[var(--gold-400)] hover:bg-[rgba(212,175,55,.22)] transition">
-          Bayar Iuran
-        </a>
-        <button id="mobileMenuBtn" class="md:hidden p-2 rounded-xl bg-white/5 border border-white/10" aria-label="Menu">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-        </button>
+      <!-- Right side intentionally empty for Apple-clean look -->
+      <div class="hidden sm:flex items-center gap-2 text-xs text-white/55">
+        <span class="px-3 py-2 rounded-xl bg-white/5 border border-white/10">RT 05 • RW 15</span>
       </div>
-    </div>
+    </header>
+  </div>
 
-    <!-- Mobile Menu -->
-    <div id="mobileOverlay" class="hidden fixed inset-0 bg-black/60"></div>
-    <div id="mobileMenu" class="fixed top-0 right-0 h-full w-[84%] max-w-sm translate-x-full transition-transform duration-300 bg-[rgba(6,7,10,.92)] border-l border-white/10 backdrop-blur-xl z-50">
-      <div class="p-5 flex items-center justify-between border-b border-white/10">
-        <div class="font-bold">Menu</div>
-        <button id="closeMobileMenu" class="p-2 rounded-xl bg-white/5 border border-white/10" aria-label="Tutup">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-        </button>
-      </div>
-      <nav class="p-5 flex flex-col gap-4 text-white/80">
-        <a href="#tentang" class="py-2">Tentang</a>
-        <a href="#iuran" class="py-2">Iuran</a>
-        <a href="#pembayaran" class="py-2">Pembayaran</a>
-        <a href="#kontak" class="py-2">Kontak</a>
-      </nav>
-      <div class="p-5">
-        <a href="#pembayaran" class="w-full inline-flex justify-center px-4 py-3 rounded-xl bg-[var(--gold-500)] text-black font-bold">
-          Bayar Iuran Sekarang
-        </a>
-      </div>
-    </div>
-  </header>
-
-  <!-- HERO FULL SCREEN + SLIDESHOW -->
+  <!-- HERO FULL SCREEN -->
   <section id="home" class="relative min-h-screen overflow-hidden noise">
+    <!-- slideshow -->
     <div id="slideshow" class="absolute inset-0">
       <div class="slide active"></div>
       <div class="slide"></div>
       <div class="slide"></div>
     </div>
 
-    <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/55 to-[rgba(6,7,10,.95)]"></div>
+    <!-- cinematic overlay -->
+    <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/55 to-[rgba(6,7,10,.96)]"></div>
 
-    <div class="pointer-events-none absolute -top-28 -left-20 w-[420px] h-[420px] rounded-full bg-[rgba(212,175,55,.20)] blur-3xl animate-glow"></div>
-    <div class="pointer-events-none absolute top-20 -right-24 w-[460px] h-[460px] rounded-full bg-[rgba(245,208,138,.14)] blur-3xl animate-glow"></div>
+    <!-- glow blobs -->
+    <div class="pointer-events-none absolute -top-32 -left-24 w-[520px] h-[520px] rounded-full bg-[rgba(212,175,55,.18)] blur-3xl animate-glow"></div>
+    <div class="pointer-events-none absolute top-10 -right-28 w-[540px] h-[540px] rounded-full bg-[rgba(245,208,138,.12)] blur-3xl animate-glow"></div>
 
-    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16">
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16">
       <div class="grid lg:grid-cols-12 gap-10 items-center">
+        <!-- LEFT -->
         <div class="lg:col-span-7">
           <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-[12px] text-white/80">
             <span class="w-2 h-2 rounded-full bg-[var(--gold-500)]"></span>
             Transparan • Otomatis • Tanpa Ribet
           </div>
 
-          <h1 class="mt-6 font-bold tracking-tight leading-[1.03] text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
-            <span class="block" id="headline-1">Portal Digital Warga</span>
-            <span class="block gold-text-gradient" id="headline-2">Cluster Swarna Asri</span>
+          <h1 class="mt-6 font-bold tracking-tight leading-[1.02] text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
+            <span id="headline-1" class="block">Portal Digital Warga</span>
+            <span id="headline-2" class="block gold-text-gradient">Cluster Swarna Asri</span>
           </h1>
 
           <p class="mt-6 text-white/80 text-lg md:text-xl max-w-2xl leading-relaxed reveal">
@@ -181,19 +252,7 @@
             secara mandiri dan profesional.
           </p>
 
-          <div class="mt-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-4 reveal">
-            <a href="#pembayaran"
-              class="px-8 py-4 rounded-2xl bg-[var(--gold-500)] text-black font-bold text-center
-                     shadow-lg shadow-[rgba(212,175,55,.18)] hover:translate-y-[-1px] transition">
-              Bayar Iuran Sekarang
-            </a>
-            <a href="#tentang"
-              class="px-8 py-4 rounded-2xl bg-white/5 border border-white/10 text-white/90 font-semibold text-center
-                     hover:bg-white/10 transition">
-              Pelajari Sistem
-            </a>
-          </div>
-
+          <!-- Apple-ish stat row -->
           <div class="mt-10 grid grid-cols-3 gap-3 max-w-xl reveal">
             <div class="glass rounded-2xl p-4">
               <div class="text-[var(--gold-400)] font-bold text-2xl">100%</div>
@@ -208,42 +267,54 @@
               <div class="text-[11px] text-white/60 uppercase tracking-widest mt-1">Tanpa Konfirmasi</div>
             </div>
           </div>
+
+          <div class="mt-10 flex items-center gap-3 text-white/55 text-xs reveal">
+            <span class="inline-block w-8 h-[1px] bg-white/25"></span>
+            Scroll untuk lihat detail
+          </div>
         </div>
 
-        <!-- Right: cards + media slots -->
+        <!-- RIGHT -->
         <div class="lg:col-span-5">
-          <div class="shimmer-border rounded-[22px]">
-            <div class="inner p-5">
-              <div class="flex items-center justify-between">
-                <div>
-                  <div class="text-sm text-white/70">Highlight</div>
-                  <div class="text-lg font-bold">Preview Portal</div>
-                </div>
-                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[11px] text-white/70">
-                  Slot media
-                </span>
+          <div class="glass rounded-[26px] p-5 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,.25)]">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-sm text-white/70">Preview Portal</div>
+                <div class="text-lg font-semibold tracking-tight">Area Media</div>
               </div>
+              <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[11px] text-white/70">
+                Image / Video
+              </span>
+            </div>
 
-              <div class="mt-4 aspect-[16/10] rounded-2xl overflow-hidden bg-white/5 border border-white/10 relative">
-                <div class="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
-                <div class="absolute inset-y-0 -left-1/3 w-1/2 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer"></div>
-                <div class="absolute inset-0 grid place-items-center text-white/60">
-                  <div class="text-center px-6">
-                    <div class="text-sm">Taruh gambar/video dashboard di sini</div>
-                    <div class="text-[11px] mt-1 text-white/40">contoh: screenshot rekap, invoice, laporan</div>
-                  </div>
+            <div class="mt-4 shimmer-frame aspect-[16/10] rounded-2xl overflow-hidden relative">
+              <!-- Put your screenshot/video here later -->
+              <div class="absolute inset-0 grid place-items-center text-white/60">
+                <div class="text-center px-6">
+                  <div class="text-sm">Slot untuk gambar/video</div>
+                  <div class="text-[11px] mt-1 text-white/40">dashboard • laporan • invoice • kegiatan</div>
                 </div>
               </div>
+            </div>
 
-              <div class="mt-5 grid grid-cols-2 gap-3">
-                <div class="rounded-2xl bg-white/5 border border-white/10 p-4 hover:bg-white/10 transition">
-                  <div class="text-[11px] text-white/60 uppercase tracking-widest">Pembayaran</div>
-                  <div class="mt-1 font-semibold">VA Unik per Warga</div>
-                </div>
-                <div class="rounded-2xl bg-white/5 border border-white/10 p-4 hover:bg-white/10 transition">
-                  <div class="text-[11px] text-white/60 uppercase tracking-widest">Laporan</div>
-                  <div class="mt-1 font-semibold">Rekap Bulanan</div>
-                </div>
+            <div class="mt-5 grid grid-cols-2 gap-3">
+              <div class="rounded-2xl bg-white/5 border border-white/10 p-4 hover:bg-white/10 transition">
+                <div class="text-[11px] text-white/60 uppercase tracking-widest">Pembayaran</div>
+                <div class="mt-1 font-semibold">VA Unik per Warga</div>
+              </div>
+              <div class="rounded-2xl bg-white/5 border border-white/10 p-4 hover:bg-white/10 transition">
+                <div class="text-[11px] text-white/60 uppercase tracking-widest">Laporan</div>
+                <div class="mt-1 font-semibold">Rekap Berkala</div>
+              </div>
+            </div>
+
+            <div class="hairline my-5"></div>
+
+            <div class="flex items-center gap-3">
+              <img src="assets/images/Logo_Swarna_Asri.png" alt="Logo" class="w-10 h-10 object-contain opacity-85" />
+              <div class="text-sm">
+                <div class="font-semibold">RT 05 • RW 15</div>
+                <div class="text-white/60 text-xs">Sawangan Village • Bedahan • Depok</div>
               </div>
             </div>
           </div>
@@ -258,232 +329,237 @@
               <div class="mt-1 font-semibold">Taman & Sampah</div>
             </div>
           </div>
-
-          <div class="mt-6 shimmer-border">
-            <div class="inner p-5">
-              <div class="flex items-center gap-4">
-                <img src="assets/logo-swarna-asri.png" alt="Logo" class="w-12 h-12 object-contain opacity-80">
-                <div>
-                  <div class="font-bold">RT 05 RW 15</div>
-                  <div class="text-sm text-white/65">Sawangan Village • Bedahan • Depok</div>
-                </div>
-              </div>
-              <div class="mt-4 text-xs text-white/50">
-                *Logo path: <code>assets/logo-swarna-asri.png</code>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
-
-      <div class="mt-10 text-center text-white/45 text-xs">
-        Scroll untuk lihat detail ↓
       </div>
     </div>
   </section>
 
-  <!-- TENTANG -->
-  <section id="tentang" class="py-24 relative overflow-hidden">
+  <!-- ABOUT -->
+  <section id="tentang" class="py-24">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid md:grid-cols-2 gap-16 items-center">
-        <div class="reveal">
-          <span class="text-[var(--gold-500)] font-semibold tracking-widest uppercase text-sm">Tentang Cluster</span>
-          <h2 class="text-3xl md:text-4xl font-bold mt-4 mb-6">
-            Komitmen Untuk <span class="text-[var(--gold-400)]">Harmoni & Transparansi</span>
-          </h2>
-          <p class="text-white/70 leading-relaxed mb-6">
-            Cluster Swarna Asri (Sawangan Village RT 05 RW 15, Bedahan) mengedepankan nilai kekeluargaan dan keamanan bersama.
-          </p>
-          <p class="text-white/70 leading-relaxed mb-8">
-            Portal ini membantu pengelolaan iuran yang transparan: tercatat otomatis, ada bukti pembayaran, dan laporan berkala.
-          </p>
+      <div class="reveal text-center max-w-3xl mx-auto">
+        <div class="text-[12px] tracking-[.25em] uppercase text-white/55">Tentang</div>
+        <h2 class="mt-4 text-3xl md:text-4xl font-bold tracking-tight">
+          Komitmen untuk <span class="text-[var(--gold-400)]">Harmoni & Transparansi</span>
+        </h2>
+        <p class="mt-5 text-white/70 leading-relaxed">
+          Cluster Swarna Asri adalah komunitas hunian yang mengedepankan nilai kekeluargaan dan keamanan bersama.
+          Portal ini membantu pencatatan iuran yang transparan: otomatis, terdokumentasi, dan siap dilaporkan berkala.
+        </p>
+      </div>
 
-          <div class="grid grid-cols-2 gap-6">
-            <div class="shimmer-border"><div class="inner p-4">
-              <h3 class="text-[var(--gold-400)] font-bold text-2xl">100%</h3>
-              <p class="text-xs text-white/55 uppercase mt-1 tracking-widest">Laporan Terbuka</p>
-            </div></div>
-            <div class="shimmer-border"><div class="inner p-4">
-              <h3 class="text-[var(--gold-400)] font-bold text-2xl">24/7</h3>
-              <p class="text-xs text-white/55 uppercase mt-1 tracking-widest">Sistem Otomatis</p>
-            </div></div>
+      <div class="mt-14 grid md:grid-cols-12 gap-8 items-stretch">
+        <div class="md:col-span-7 reveal glass rounded-[26px] p-6 border border-white/10">
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div class="rounded-2xl bg-white/5 border border-white/10 p-5">
+              <div class="text-[var(--gold-400)] font-bold text-2xl">100%</div>
+              <div class="text-xs text-white/55 uppercase tracking-widest mt-1">Laporan Terbuka</div>
+              <p class="mt-3 text-sm text-white/70 leading-relaxed">
+                Rekap iuran dan penggunaan dana bisa dipublikasikan rutin untuk warga.
+              </p>
+            </div>
+            <div class="rounded-2xl bg-white/5 border border-white/10 p-5">
+              <div class="text-[var(--gold-400)] font-bold text-2xl">24/7</div>
+              <div class="text-xs text-white/55 uppercase tracking-widest mt-1">Sistem Otomatis</div>
+              <p class="mt-3 text-sm text-white/70 leading-relaxed">
+                Pencatatan pembayaran & bukti transaksi terbit otomatis.
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-6 rounded-2xl bg-white/5 border border-white/10 p-5">
+            <div class="text-sm font-semibold">Apa yang akan ada di portal ini?</div>
+            <ul class="mt-3 text-sm text-white/70 leading-relaxed list-disc pl-5 space-y-2">
+              <li>Informasi iuran & kebijakan RT/RW.</li>
+              <li>Konfirmasi otomatis via Virtual Account (VA).</li>
+              <li>Rekap bulanan & transparansi penggunaan dana.</li>
+              <li>Dokumentasi kegiatan & pengumuman warga.</li>
+            </ul>
           </div>
         </div>
 
-        <div class="reveal">
-          <div class="shimmer-border">
-            <div class="inner p-6">
-              <div class="aspect-square rounded-2xl bg-white/5 border border-white/10 grid place-items-center overflow-hidden relative">
-                <div class="absolute inset-0 bg-gradient-to-br from-[rgba(212,175,55,.15)] to-transparent"></div>
-                <img src="assets/logo-swarna-asri.png" alt="Visual Cluster" class="w-1/2 opacity-30 relative z-10">
-              </div>
-              <div class="mt-4 text-sm text-white/65">
-                Slot ini bisa diganti foto aerial cluster / video drone.
-              </div>
+        <div class="md:col-span-5 reveal glass rounded-[26px] p-6 border border-white/10">
+          <div class="text-sm font-semibold">Slot Media (Foto/Video)</div>
+          <p class="mt-2 text-sm text-white/65">
+            Taruh foto aerial cluster / video kegiatan di sini.
+          </p>
+
+          <div class="mt-4 shimmer-frame aspect-square rounded-2xl overflow-hidden relative">
+            <div class="absolute inset-0 grid place-items-center text-white/55 text-sm">
+              Media Placeholder
             </div>
+          </div>
+
+          <div class="mt-5 text-xs text-white/45">
+            Tip: taruh file di <code>assets/media/</code> lalu ganti slot ini dengan <code>&lt;img&gt;</code> / <code>&lt;video&gt;</code>.
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- IURAN -->
+  <!-- FEES / IURAN -->
   <section id="iuran" class="py-24 bg-white/[0.02] border-y border-white/5">
-    <div class="max-w-7xl mx-auto px-4 text-center mb-16 reveal">
-      <h2 class="text-3xl md:text-4xl font-bold mb-4">
-        Jenis Iuran <span class="text-[var(--gold-400)]">Lingkungan</span>
-      </h2>
-      <p class="text-white/70 max-w-xl mx-auto">
-        Dana terkumpul digunakan untuk kenyamanan dan pemeliharaan fasilitas bersama.
-      </p>
-    </div>
-
-    <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-8">
-      <!-- Card template -->
-      <div class="reveal shimmer-border">
-        <div class="inner p-8 hover:translate-y-[-2px] transition">
-          <div class="w-12 h-12 bg-[rgba(212,175,55,.12)] rounded-xl grid place-items-center text-[var(--gold-500)] mb-6 border border-[rgba(212,175,55,.25)]">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-          </div>
-          <h3 class="text-xl font-bold mb-3">Keamanan & CCTV</h3>
-          <p class="text-white/70 text-sm leading-relaxed">Security 24 jam & pemeliharaan CCTV lingkungan.</p>
-
-          <div class="mt-6 aspect-[16/9] rounded-2xl bg-white/5 border border-white/10 overflow-hidden relative">
-            <div class="absolute inset-y-0 -left-1/3 w-1/2 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer"></div>
-            <div class="absolute inset-0 grid place-items-center text-[11px] text-white/50">Slot gambar/video</div>
-          </div>
-        </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="reveal text-center max-w-3xl mx-auto">
+        <div class="text-[12px] tracking-[.25em] uppercase text-white/55">Iuran</div>
+        <h2 class="mt-4 text-3xl md:text-4xl font-bold tracking-tight">
+          Jenis Iuran <span class="text-[var(--gold-400)]">Lingkungan</span>
+        </h2>
+        <p class="mt-5 text-white/70 leading-relaxed">
+          Dana terkumpul digunakan sepenuhnya untuk kenyamanan dan pemeliharaan fasilitas bersama.
+        </p>
       </div>
 
-      <div class="reveal shimmer-border">
-        <div class="inner p-8 hover:translate-y-[-2px] transition">
-          <div class="w-12 h-12 bg-[rgba(212,175,55,.12)] rounded-xl grid place-items-center text-[var(--gold-500)] mb-6 border border-[rgba(212,175,55,.25)]">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+      <div class="mt-14 grid md:grid-cols-3 gap-6">
+        <!-- Card -->
+        <div class="reveal glass rounded-[26px] p-6 border border-white/10 hover:bg-white/10 transition">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-2xl bg-[rgba(212,175,55,.12)] border border-[rgba(212,175,55,.25)] grid place-items-center text-[var(--gold-500)]">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            </div>
+            <div class="font-semibold">Keamanan & CCTV</div>
           </div>
-          <h3 class="text-xl font-bold mb-3">Kebersihan Rutin</h3>
-          <p class="text-white/70 text-sm leading-relaxed">Sampah terjadwal & taman terawat.</p>
-
-          <div class="mt-6 aspect-[16/9] rounded-2xl bg-white/5 border border-white/10 overflow-hidden relative">
-            <div class="absolute inset-y-0 -left-1/3 w-1/2 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer"></div>
-            <div class="absolute inset-0 grid place-items-center text-[11px] text-white/50">Slot gambar/video</div>
+          <p class="mt-4 text-sm text-white/70 leading-relaxed">
+            Menjaga keamanan 24 jam dengan security dan pemeliharaan CCTV.
+          </p>
+          <div class="mt-5 shimmer-frame aspect-[16/9] rounded-2xl overflow-hidden relative">
+            <div class="absolute inset-0 grid place-items-center text-white/45 text-xs">Slot gambar/video</div>
           </div>
         </div>
-      </div>
 
-      <div class="reveal shimmer-border">
-        <div class="inner p-8 hover:translate-y-[-2px] transition">
-          <div class="w-12 h-12 bg-[rgba(212,175,55,.12)] rounded-xl grid place-items-center text-[var(--gold-500)] mb-6 border border-[rgba(212,175,55,.25)]">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+        <div class="reveal glass rounded-[26px] p-6 border border-white/10 hover:bg-white/10 transition">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-2xl bg-[rgba(212,175,55,.12)] border border-[rgba(212,175,55,.25)] grid place-items-center text-[var(--gold-500)]">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            </div>
+            <div class="font-semibold">Kebersihan Rutin</div>
           </div>
-          <h3 class="text-xl font-bold mb-3">Dana Sosial Warga</h3>
-          <p class="text-white/70 text-sm leading-relaxed">Santunan & dukungan kegiatan sosial cluster.</p>
+          <p class="mt-4 text-sm text-white/70 leading-relaxed">
+            Pengangkutan sampah terjadwal dan pemeliharaan taman.
+          </p>
+          <div class="mt-5 shimmer-frame aspect-[16/9] rounded-2xl overflow-hidden relative">
+            <div class="absolute inset-0 grid place-items-center text-white/45 text-xs">Slot gambar/video</div>
+          </div>
+        </div>
 
-          <div class="mt-6 aspect-[16/9] rounded-2xl bg-white/5 border border-white/10 overflow-hidden relative">
-            <div class="absolute inset-y-0 -left-1/3 w-1/2 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer"></div>
-            <div class="absolute inset-0 grid place-items-center text-[11px] text-white/50">Slot gambar/video</div>
+        <div class="reveal glass rounded-[26px] p-6 border border-white/10 hover:bg-white/10 transition">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-2xl bg-[rgba(212,175,55,.12)] border border-[rgba(212,175,55,.25)] grid place-items-center text-[var(--gold-500)]">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+            </div>
+            <div class="font-semibold">Dana Sosial Warga</div>
+          </div>
+          <p class="mt-4 text-sm text-white/70 leading-relaxed">
+            Santunan warga sakit/duka dan dukungan kegiatan sosial.
+          </p>
+          <div class="mt-5 shimmer-frame aspect-[16/9] rounded-2xl overflow-hidden relative">
+            <div class="absolute inset-0 grid place-items-center text-white/45 text-xs">Slot gambar/video</div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- PEMBAYARAN -->
+  <!-- PAYMENT -->
   <section id="pembayaran" class="py-24">
-    <div class="max-w-4xl mx-auto px-4 reveal">
-      <div class="shimmer-border rounded-[28px]">
-        <div class="inner p-8 md:p-12 relative overflow-hidden">
-          <div class="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-[rgba(212,175,55,.22)] blur-3xl"></div>
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="reveal glass rounded-[28px] p-8 md:p-12 border border-white/10 relative overflow-hidden">
+        <div class="pointer-events-none absolute -top-24 -right-28 w-80 h-80 rounded-full bg-[rgba(212,175,55,.18)] blur-3xl animate-glow"></div>
 
-          <h2 class="text-3xl font-bold mb-6 text-[var(--gold-400)] text-center">Prosedur Pembayaran Digital</h2>
-          <p class="text-center text-white/75 mb-10">
-            Pembayaran menggunakan <strong>Virtual Account (VA)</strong> (iPaymu). Tanpa konfirmasi manual via WhatsApp.
+        <div class="text-center max-w-2xl mx-auto">
+          <div class="text-[12px] tracking-[.25em] uppercase text-white/55">Pembayaran</div>
+          <h2 class="mt-4 text-3xl md:text-4xl font-bold tracking-tight text-[var(--gold-400)]">
+            Prosedur Pembayaran Digital
+          </h2>
+          <p class="mt-5 text-white/75 leading-relaxed">
+            Menggunakan sistem <strong>Virtual Account (VA)</strong> (iPaymu).
+            Pembayaran tercatat otomatis tanpa konfirmasi manual.
           </p>
+        </div>
 
-          <div class="space-y-6">
-            <div class="flex items-start gap-4">
-              <div class="w-9 h-9 rounded-full bg-[var(--gold-500)] text-black grid place-items-center font-bold flex-shrink-0">1</div>
-              <p class="text-white/80">Nomor VA unik dikirim oleh sistem (n8n) ke WhatsApp.</p>
-            </div>
-            <div class="flex items-start gap-4">
-              <div class="w-9 h-9 rounded-full bg-[var(--gold-500)] text-black grid place-items-center font-bold flex-shrink-0">2</div>
-              <p class="text-white/80">Transfer via M-Banking / ATM sesuai nominal.</p>
-            </div>
-            <div class="flex items-start gap-4">
-              <div class="w-9 h-9 rounded-full bg-[var(--gold-500)] text-black grid place-items-center font-bold flex-shrink-0">3</div>
-              <p class="text-white/80">Pembayaran tercatat otomatis + invoice digital terkirim.</p>
-            </div>
+        <div class="mt-10 grid md:grid-cols-3 gap-6">
+          <div class="rounded-2xl bg-white/5 border border-white/10 p-6">
+            <div class="w-10 h-10 rounded-2xl bg-[var(--gold-500)] text-black grid place-items-center font-bold">1</div>
+            <div class="mt-4 font-semibold">Dapatkan VA</div>
+            <p class="mt-2 text-sm text-white/70">Nomor VA unik dikirim sistem (n8n) ke WhatsApp.</p>
           </div>
+          <div class="rounded-2xl bg-white/5 border border-white/10 p-6">
+            <div class="w-10 h-10 rounded-2xl bg-[var(--gold-500)] text-black grid place-items-center font-bold">2</div>
+            <div class="mt-4 font-semibold">Transfer</div>
+            <p class="mt-2 text-sm text-white/70">Bayar via m-banking/ATM sesuai nominal iuran.</p>
+          </div>
+          <div class="rounded-2xl bg-white/5 border border-white/10 p-6">
+            <div class="w-10 h-10 rounded-2xl bg-[var(--gold-500)] text-black grid place-items-center font-bold">3</div>
+            <div class="mt-4 font-semibold">Tercatat Otomatis</div>
+            <p class="mt-2 text-sm text-white/70">Invoice digital & pencatatan pembayaran terbit otomatis.</p>
+          </div>
+        </div>
 
-          <div class="mt-10 grid md:grid-cols-2 gap-4">
-            <a href="#"
-               class="px-6 py-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition text-center">
-              Lihat Contoh Invoice
-            </a>
-            <a href="#"
-               class="px-6 py-4 rounded-2xl bg-[var(--gold-500)] text-black font-bold hover:translate-y-[-1px] transition text-center">
-              Mulai Bayar Iuran
-            </a>
-          </div>
+        <div class="mt-10 text-center text-xs text-white/45">
+          (CTA payment bisa lo tambah belakangan ketika sistem VA udah live)
         </div>
       </div>
     </div>
   </section>
 
   <!-- FOOTER -->
-  <footer id="kontak" class="py-16 border-t border-white/5 bg-[rgba(6,7,10,.9)]">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-3 gap-12 reveal">
-      <div>
-        <span class="text-[var(--gold-400)] font-bold text-xl block mb-4">Swarna Asri</span>
-        <p class="text-white/60 text-sm">
-          RT 05 RW 15, Sawangan Village, Bedahan, Sawangan, Kota Depok.<br>Jawa Barat, 16519.
-        </p>
-      </div>
-      <div>
-        <h4 class="font-bold mb-4 text-[var(--gold-500)] uppercase text-xs tracking-widest">Akses Cepat</h4>
-        <div class="flex flex-col space-y-2 text-sm text-white/70">
-          <a href="#tentang" class="hover:text-[var(--gold-400)]">Kebijakan Privasi</a>
-          <a href="#iuran" class="hover:text-[var(--gold-400)]">Syarat & Ketentuan</a>
-          <a href="#pembayaran" class="hover:text-[var(--gold-400)]">Layanan Warga</a>
+  <footer id="kontak" class="py-16 border-t border-white/5 bg-[rgba(6,7,10,.92)]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="reveal grid md:grid-cols-3 gap-10">
+        <div>
+          <div class="flex items-center gap-3">
+            <img src="assets/images/Logo_Swarna_Asri.png" alt="Logo" class="w-10 h-10 object-contain opacity-85" />
+            <div>
+              <div class="font-semibold text-[var(--gold-400)]">Swarna Asri</div>
+              <div class="text-xs text-white/55">Portal Digital Warga</div>
+            </div>
+          </div>
+          <p class="mt-4 text-sm text-white/60">
+            RT 05 RW 15, Sawangan Village, Bedahan, Sawangan, Kota Depok.<br />Jawa Barat, 16519.
+          </p>
+        </div>
+
+        <div>
+          <div class="text-xs tracking-[.25em] uppercase text-white/55">Akses</div>
+          <div class="mt-4 flex flex-col gap-2 text-sm text-white/70">
+            <a href="#tentang" class="hover:text-white">Tentang</a>
+            <a href="#iuran" class="hover:text-white">Iuran</a>
+            <a href="#pembayaran" class="hover:text-white">Pembayaran</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="text-xs tracking-[.25em] uppercase text-white/55">Kontak</div>
+          <p class="mt-4 text-sm text-white/70">WhatsApp: +62 812-XXXX-XXXX</p>
+          <p class="mt-2 text-sm text-white/70">Email: rt05@swarna-asri.com</p>
         </div>
       </div>
-      <div>
-        <h4 class="font-bold mb-4 text-[var(--gold-500)] uppercase text-xs tracking-widest">Hubungi Pengurus</h4>
-        <p class="text-white/70 text-sm mb-2">WhatsApp: +62 812-XXXX-XXXX</p>
-        <p class="text-white/70 text-sm">Email: rt05@swarna-asri.com</p>
+
+      <div class="mt-12 pt-8 border-t border-white/5 text-center text-white/35 text-[10px] uppercase tracking-[.25em]">
+        &copy; 2026 Swarna Asri. All Rights Reserved.
       </div>
-    </div>
-    <div class="max-w-7xl mx-auto px-4 mt-16 pt-8 border-t border-white/5 text-center text-white/35 text-[10px] uppercase tracking-widest">
-      &copy; 2026 Cluster Swarna Asri. All Rights Reserved.
     </div>
   </footer>
 
   <script>
-    // Navbar scroll effect
-    window.addEventListener("scroll", () => {
-      const navbar = document.getElementById("navbar");
-      if (window.scrollY > 50) {
-        navbar.classList.add("nav-solid");
-        navbar.classList.remove("nav-transparent");
+    // Apple-style navbar behavior: transparent on top, glass when scrolled
+    const nav = document.getElementById("nav");
+    const navWrap = document.getElementById("navWrap");
+    function onScroll() {
+      const sc = window.scrollY || 0;
+      if (sc > 10) {
+        nav.classList.remove("is-top");
+        nav.classList.add("is-scrolled");
+        navWrap.classList.add("is-scrolled");
       } else {
-        navbar.classList.add("nav-transparent");
-        navbar.classList.remove("nav-solid");
+        nav.classList.add("is-top");
+        nav.classList.remove("is-scrolled");
+        navWrap.classList.remove("is-scrolled");
       }
-    });
-
-    // Mobile menu
-    const menuBtn = document.getElementById("mobileMenuBtn");
-    const closeBtn = document.getElementById("closeMobileMenu");
-    const menu = document.getElementById("mobileMenu");
-    const overlay = document.getElementById("mobileOverlay");
-    function toggleMenu() {
-      menu.classList.toggle("translate-x-full");
-      overlay.classList.toggle("hidden");
     }
-    if(menuBtn && closeBtn && menu && overlay){
-      menuBtn.addEventListener("click", toggleMenu);
-      closeBtn.addEventListener("click", toggleMenu);
-      overlay.addEventListener("click", toggleMenu);
-    }
+    window.addEventListener("scroll", onScroll);
+    onScroll();
 
     // Reveal on scroll
     const observer = new IntersectionObserver((entries) => {
@@ -491,7 +567,7 @@
     }, { threshold: 0.12 });
     document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
 
-    // Headline word reveal
+    // Headline word-by-word reveal (Apple-ish subtle)
     function animateWords(elId, delay = 45) {
       const el = document.getElementById(elId);
       if (!el) return;
@@ -500,32 +576,43 @@
       el.textContent = "";
       words.forEach((w, i) => {
         const span = document.createElement("span");
+        span.className = "word";
         span.textContent = w + (i < words.length - 1 ? " " : "");
-        span.style.opacity = "0";
-        span.style.display = "inline-block";
-        span.style.transform = "translateY(10px)";
-        span.style.transition = "opacity .55s ease, transform .55s ease";
         el.appendChild(span);
-        setTimeout(() => {
-          span.style.opacity = "1";
-          span.style.transform = "translateY(0)";
-        }, 120 + i * delay);
+        setTimeout(() => span.classList.add("on"), 140 + i * delay);
       });
     }
-    animateWords("headline-1", 45);
-    animateWords("headline-2", 55);
+    animateWords("headline-1", 48);
+    animateWords("headline-2", 56);
 
-    // HERO slideshow sources:
-    // Taruh gambar di assets/hero/ lalu ganti ini:
+    // Hero slideshow (use local assets; fallback to gradients if not found)
+    const slides = document.querySelectorAll("#slideshow .slide");
+
+    // Put your images here:
     const sources = [
       "assets/hero/slide-1.jpg",
       "assets/hero/slide-2.jpg",
       "assets/hero/slide-3.jpg"
     ];
 
-    const slides = document.querySelectorAll("#slideshow .slide");
+    // Fallback backgrounds if images not available
+    const fallbacks = [
+      "linear-gradient(135deg, rgba(212,175,55,.18), rgba(0,0,0,0)), radial-gradient(900px 500px at 20% 20%, rgba(245,208,138,.12), transparent 60%), linear-gradient(180deg, #0b0d12, #05060a)",
+      "radial-gradient(900px 500px at 70% 30%, rgba(212,175,55,.14), transparent 60%), linear-gradient(180deg, #0b0d12, #05060a)",
+      "radial-gradient(900px 500px at 35% 10%, rgba(245,208,138,.12), transparent 60%), linear-gradient(180deg, #0b0d12, #05060a)"
+    ];
+
+    // Try load images; if error, use fallback gradients
     slides.forEach((s, i) => {
-      s.style.backgroundImage = `url('${sources[i % sources.length]}')`;
+      const src = sources[i % sources.length];
+      const img = new Image();
+      img.onload = () => {
+        s.style.backgroundImage = `url('${src}')`;
+      };
+      img.onerror = () => {
+        s.style.backgroundImage = fallbacks[i % fallbacks.length];
+      };
+      img.src = src;
     });
 
     let idx = 0;
