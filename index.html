@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cluster Swarna Asri - Portal Digital Warga</title>
+
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -34,238 +36,219 @@
                             800: '#0F0F0F',
                             900: '#080808',
                         }
-                    },
-                    fontFamily: {
-                        serif: ['Georgia', 'Cambria', 'Times New Roman', 'serif'],
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-        }
-        .font-display {
-            font-family: 'Playfair Display', Georgia, serif;
-        }
-        .gold-gradient {
-            background: linear-gradient(135deg, #D4A017 0%, #FFD966 50%, #D4A017 100%);
-        }
-        .gold-gradient-subtle {
-            background: linear-gradient(135deg, rgba(212,160,23,0.08) 0%, rgba(255,217,102,0.15) 50%, rgba(212,160,23,0.08) 100%);
-        }
+        body { font-family: 'Inter', system-ui, sans-serif; }
+        .font-display { font-family: 'Playfair Display', Georgia, serif; }
+
+        /* Gold Gradients */
+        .gold-gradient { background: linear-gradient(135deg, #D4A017 0%, #FFD966 50%, #D4A017 100%); }
+        .gold-gradient-subtle { background: linear-gradient(135deg, rgba(212,160,23,0.08) 0%, rgba(255,217,102,0.15) 50%, rgba(212,160,23,0.08) 100%); }
         .gold-text-gradient {
             background: linear-gradient(135deg, #FFD966 0%, #D4A017 50%, #FFD966 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .gold-border-gradient {
-            border-image: linear-gradient(135deg, #D4A017, #FFD966, #D4A017) 1;
-        }
-        .nav-transparent {
-            background: transparent;
-            backdrop-filter: none;
-        }
+
+        /* Navbar States */
+        .nav-transparent { background: transparent; }
         .nav-solid {
             background: rgba(15, 15, 15, 0.95);
             backdrop-filter: blur(20px);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(212, 160, 23, 0.1);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.3), 0 1px 0 rgba(212,160,23,0.1);
         }
+
+        /* Hero Overlay */
         .hero-overlay {
-            background: linear-gradient(
-                180deg,
-                rgba(8, 8, 8, 0.7) 0%,
-                rgba(8, 8, 8, 0.4) 40%,
-                rgba(8, 8, 8, 0.6) 70%,
-                rgba(8, 8, 8, 0.9) 100%
+            background: linear-gradient(180deg,
+                rgba(8,8,8,0.7) 0%,
+                rgba(8,8,8,0.4) 40%,
+                rgba(8,8,8,0.6) 70%,
+                rgba(8,8,8,0.95) 100%
             );
         }
-        .card-hover {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+
+        /* Card Hover */
+        .card-hover { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         .card-hover:hover {
             transform: translateY(-8px);
-            box-shadow: 0 20px 60px rgba(212, 160, 23, 0.15), 0 0 0 1px rgba(212, 160, 23, 0.3);
+            box-shadow: 0 20px 60px rgba(212,160,23,0.15), 0 0 0 1px rgba(212,160,23,0.3);
         }
-        .shimmer {
-            position: relative;
-            overflow: hidden;
-        }
+
+        /* Shimmer Effect */
+        .shimmer { position: relative; overflow: hidden; }
         .shimmer::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 217, 102, 0.1), transparent);
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,217,102,0.1), transparent);
             animation: shimmer 3s infinite;
         }
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-        .divider-gold {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #D4A017, transparent);
-        }
+        @keyframes shimmer { 0% { left: -100%; } 100% { left: 100%; } }
+
+        /* Divider */
+        .divider-gold { height: 1px; background: linear-gradient(90deg, transparent, #D4A017, transparent); }
+
+        /* Scroll Animations */
         .section-fade {
-            opacity: 0;
-            transform: translateY(30px);
+            opacity: 0; transform: translateY(30px);
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .section-fade.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0F0F0F;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, #D4A017, #996515);
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(180deg, #FFD966, #D4A017);
-        }
+        .section-fade.visible { opacity: 1; transform: translateY(0); }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0F0F0F; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #D4A017, #996515); border-radius: 4px; }
+
+        /* Mobile Menu */
         .mobile-menu {
             transform: translateX(100%);
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .mobile-menu.open {
-            transform: translateX(0);
-        }
-        .iuran-item {
-            position: relative;
-            padding-left: 1.5rem;
-        }
-        .iuran-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 8px;
-            height: 8px;
-            background: #D4A017;
-            border-radius: 50%;
-        }
+        .mobile-menu.open { transform: translateX(0); }
+
+        /* Dot Pattern */
         .pattern-overlay {
             background-image: radial-gradient(circle at 1px 1px, rgba(212,160,23,0.03) 1px, transparent 0);
             background-size: 40px 40px;
         }
     </style>
 </head>
+
 <body class="bg-dark-900 text-white antialiased">
 
     <!-- ============================================================
          HEADER / NAVIGATION BAR
-         - Transparan di atas, berubah hitam saat di-scroll
-         - Logo placeholder di sebelah kiri
+         Transparan di atas, berubah hitam solid saat di-scroll.
          ============================================================ -->
     <header id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 nav-transparent">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
-                <!-- 
-                    =============================================
-                    LOGO PLACEHOLDER
-                    Ganti src di bawah dengan path file logo Anda.
-                    Contoh: src="./assets/images/logo-swarna-asri.png"
-                    Ukuran rekomendasi: 180x50px (PNG transparan)
-                    =============================================
-                -->
+
+                <!-- =============================================
+                     LOGO PLACEHOLDER
+                     Ganti src="" dengan path logo Anda, contoh:
+                     src="./assets/images/logo-swarna-asri.png"
+                     Ukuran rekomendasi: 180x50px PNG transparan
+                     ============================================= -->
                 <a href="#beranda" class="flex items-center space-x-3 group">
-                    <div class="w-10 h-10 rounded-lg gold-gradient flex items-center justify-center shadow-lg shadow-gold-500/20 group-hover:shadow-gold-500/40 transition-shadow duration-300">
-                        <img 
-                            src="" 
-                            alt="Logo Swarna Asri" 
-                            class="w-8 h-8 object-contain hidden"
-                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                        >
-                        <!-- Fallback icon jika logo belum ada -->
-                        <svg class="w-6 h-6 text-dark-900" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    <div class="w-10 h-10 rounded-lg gold-gradient flex items-center justify-center shadow-lg shadow-gold-500/20">
+                        <img src="" alt="Logo Swarna Asri" class="w-8 h-8 object-contain hidden"
+                             onerror="this.style.display='none'">
+                        <!-- Fallback Icon jika logo belum ada -->
+                        <svg class="w-6 h-6 text-dark-900" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1"/>
                         </svg>
                     </div>
                     <div class="flex flex-col">
-                        <span class="text-gold-400 font-display font-bold text-lg leading-tight tracking-wide">Swarna Asri</span>
+                        <span class="text-gold-400 font-display font-bold text-lg leading-tight">Swarna Asri</span>
                         <span class="text-dark-300 text-[10px] uppercase tracking-[0.2em] font-medium">Cluster Residence</span>
                     </div>
                 </a>
 
                 <!-- Desktop Navigation -->
                 <nav class="hidden md:flex items-center space-x-1">
-                    <a href="#beranda" class="nav-link px-4 py-2 text-sm font-medium text-dark-200 hover:text-gold-400 transition-colors duration-300 rounded-lg hover:bg-white/5">Beranda</a>
-                    <a href="#tentang" class="nav-link px-4 py-2 text-sm font-medium text-dark-200 hover:text-gold-400 transition-colors duration-300 rounded-lg hover:bg-white/5">Tentang</a>
-                    <a href="#kegiatan" class="nav-link px-4 py-2 text-sm font-medium text-dark-200 hover:text-gold-400 transition-colors duration-300 rounded-lg hover:bg-white/5">Kegiatan</a>
-                    <a href="#iuran" class="nav-link px-4 py-2 text-sm font-medium text-dark-200 hover:text-gold-400 transition-colors duration-300 rounded-lg hover:bg-white/5">Iuran</a>
-                    <a href="#pembayaran" class="nav-link px-4 py-2 text-sm font-medium text-dark-200 hover:text-gold-400 transition-colors duration-300 rounded-lg hover:bg-white/5">Pembayaran</a>
+                    <a href="#beranda" class="px-4 py-2 text-sm font-medium text-dark-200 hover:text-gold-400 transition-colors rounded-lg hover:bg-white/5">Beranda</a>
+                    <a href="#tentang" class="px-4 py-2 text-sm font-medium text-dark-200 hover:text-gold-400 transition-colors rounded-lg hover:bg-white/5">Tentang</a>
+                    <a href="#kegiatan" class="px-4 py-2 text-sm font-medium text-dark-200 hover:text-gold-400 transition-colors rounded-lg hover:bg-white/5">Kegiatan</a>
+                    <a href="#iuran" class="px-4 py-2 text-sm font-medium text-dark-200 hover:text-gold-400 transition-colors rounded-lg hover:bg-white/5">Iuran</a>
+                    <a href="#pembayaran" class="px-4 py-2 text-sm font-medium text-dark-200 hover:text-gold-400 transition-colors rounded-lg hover:bg-white/5">Pembayaran</a>
                     <a href="#kontak" class="ml-4 px-6 py-2.5 text-sm font-semibold text-dark-900 gold-gradient rounded-lg hover:shadow-lg hover:shadow-gold-500/30 transition-all duration-300 hover:scale-105">Hubungi Kami</a>
                 </nav>
 
                 <!-- Mobile Menu Button -->
-                <button id="mobileMenuBtn" class="md:hidden p-2 text-dark-200 hover:text-gold-400 transition-colors" aria-label="Toggle menu">
+                <button id="mobileMenuBtn" class="md:hidden p-2 text-dark-200 hover:text-gold-400 transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path id="menuIcon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>
                 </button>
             </div>
         </div>
 
-        <!-- Mobile Menu -->
+        <!-- Mobile Menu Panel -->
         <div id="mobileMenu" class="mobile-menu fixed top-0 right-0 w-80 h-full bg-dark-800/98 backdrop-blur-xl border-l border-gold-500/10 md:hidden z-50">
             <div class="p-6">
                 <div class="flex justify-between items-center mb-10">
                     <span class="text-gold-400 font-display font-bold text-lg">Menu</span>
-                    <button id="closeMobileMenu" class="p-2 text-dark-300 hover:text-gold-400 transition-colors">
+                    <button id="closeMobileMenu" class="p-2 text-dark-300 hover:text-gold-400">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                         </svg>
                     </button>
                 </div>
                 <nav class="flex flex-col space-y-2">
-                    <a href="#beranda" class="mobile-nav-link px-4 py-3 text-dark-200 hover:text-gold-400 hover:bg-white/5 rounded-lg transition-all duration-300 font-medium">Beranda</a>
-                    <a href="#tentang" class="mobile-nav-link px-4 py-3 text-dark-200 hover:text-gold-400 hover:bg-white/5 rounded-lg transition-all duration-300 font-medium">Tentang</a>
-                    <a href="#kegiatan" class="mobile-nav-link px-4 py-3 text-dark-200 hover:text-gold-400 hover:bg-white/5 rounded-lg transition-all duration-300 font-medium">Kegiatan</a>
-                    <a href="#iuran" class="mobile-nav-link px-4 py-3 text-dark-200 hover:text-gold-400 hover:bg-white/5 rounded-lg transition-all duration-300 font-medium">Iuran</a>
-                    <a href="#pembayaran" class="mobile-nav-link px-4 py-3 text-dark-200 hover:text-gold-400 hover:bg-white/5 rounded-lg transition-all duration-300 font-medium">Pembayaran</a>
+                    <a href="#beranda" class="mob-link px-4 py-3 text-dark-200 hover:text-gold-400 hover:bg-white/5 rounded-lg transition-all font-medium">Beranda</a>
+                    <a href="#tentang" class="mob-link px-4 py-3 text-dark-200 hover:text-gold-400 hover:bg-white/5 rounded-lg transition-all font-medium">Tentang</a>
+                    <a href="#kegiatan" class="mob-link px-4 py-3 text-dark-200 hover:text-gold-400 hover:bg-white/5 rounded-lg transition-all font-medium">Kegiatan</a>
+                    <a href="#iuran" class="mob-link px-4 py-3 text-dark-200 hover:text-gold-400 hover:bg-white/5 rounded-lg transition-all font-medium">Iuran</a>
+                    <a href="#pembayaran" class="mob-link px-4 py-3 text-dark-200 hover:text-gold-400 hover:bg-white/5 rounded-lg transition-all font-medium">Pembayaran</a>
                     <div class="pt-4">
-                        <a href="#kontak" class="mobile-nav-link block text-center px-6 py-3 text-dark-900 font-semibold gold-gradient rounded-lg">Hubungi Kami</a>
+                        <a href="#kontak" class="mob-link block text-center px-6 py-3 text-dark-900 font-semibold gold-gradient rounded-lg">Hubungi Kami</a>
                     </div>
                 </nav>
             </div>
         </div>
     </header>
 
-    <!-- Mobile Menu Overlay -->
-    <div id="mobileOverlay" class="fixed inset-0 bg-black/60 z-40 hidden md:hidden" onclick="closeMobileMenu()"></div>
+    <!-- Mobile Overlay -->
+    <div id="mobileOverlay" class="fixed inset-0 bg-black/60 z-40 hidden md:hidden"></div>
+
 
     <!-- ============================================================
          HERO SECTION
-         - Judul besar dengan latar belakang gelap & teks emas
-         - Placeholder video 16:9 fullscreen
+         Judul besar + Video placeholder 16:9 fullscreen
          ============================================================ -->
     <section id="beranda" class="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <!-- 
-            =============================================
-            VIDEO PLACEHOLDER
-            Ganti src di bawah dengan path file video Anda.
-            Contoh: src="./assets/videos/lingkungan-swarna-asri.mp4"
-            Format rekomendasi: MP4 (H.264), rasio 16:9
-            Resolusi rekomendasi: 1920x1080px
-            Ukuran file: Usahakan di bawah 15MB untuk loading cepat
-            
-            Anda juga bisa menambahkan poster (thumbnail):
-            poster="./assets/images/video-thumbnail.jpg"
-            =============================================
-        -->
-        <div class="absolute
+
+        <!-- =============================================
+             VIDEO BACKGROUND PLACEHOLDER
+             Ganti src="" dengan path video Anda, contoh:
+             src="./assets/videos/lingkungan-swarna-asri.mp4"
+             Format: MP4 (H.264), Rasio 16:9
+             Resolusi: 1920x1080, Ukuran: < 15MB
+             Tambahkan poster untuk thumbnail:
+             poster="./assets/images/video-thumbnail.jpg"
+             ============================================= -->
+        <div class="absolute inset-0 w-full h-full">
+            <video
+                class="w-full h-full object-cover"
+                src=""
+                poster=""
+                autoplay
+                muted
+                loop
+                playsinline
+            >
+                Browser Anda tidak mendukung tag video.
+            </video>
+            <!-- Fallback background jika video belum ada -->
+            <div class="absolute inset-0 bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900"></div>
+        </div>
+
+        <!-- Dark Overlay di atas video -->
+        <div class="absolute inset-0 hero-overlay"></div>
+        <div class="absolute inset-0 pattern-overlay"></div>
+
+        <!-- Hero Content -->
+        <div class="relative z-10 text-center px-4 sm:px-6 max-w-5xl mx-auto">
+            <!-- Decorative Line -->
+            <div class="flex items-center justify-center mb-8">
+                <div class="w-12 h-px bg-gold-500"></div>
+                <span class="mx-4 text-gold-500 text-xs uppercase tracking-[0.3em] font-medium">Selamat Datang</span>
+                <div class="w-12 h-px bg-gold-500"></div>
+            </div>
+
+            <h1 class="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl
